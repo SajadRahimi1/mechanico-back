@@ -1,6 +1,5 @@
 
 using mechanico.Context;
-using mechanico.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,8 +11,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
 
-builder.Services.AddScoped<IMechanicRepository, MechanicRepository>();
-
+DependencyRegistration.RegisterDependencies(builder.Services);
+    
 var connectionString = builder.Configuration.GetConnectionString("mssqlConnection");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 
