@@ -20,4 +20,10 @@ public class MechanicController : ControllerBase
     {
         return await mechanicRepository.GetAll(page);
     }
+
+    [HttpGet, Route("city")]
+    public async Task<ResultData> GetByCity([FromQuery] string city)
+    {
+        return await mechanicRepository.GetByCity(city);
+    }
 }

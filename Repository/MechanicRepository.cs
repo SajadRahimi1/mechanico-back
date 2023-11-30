@@ -17,8 +17,9 @@ public class MechanicRepository : IMechanicRepository
         return new ResultData(new Data { data = mechanics });
     }
 
-    public Task<ResultData> GetByCity()
+    public async Task<ResultData> GetByCity(string city)
     {
-        throw new NotImplementedException();
+        var mechanics = await appDbContext.Mechanics.Where(mechanic => mechanic.Address.City == city).ToListAsync();
+        return new ResultData(new Data { data = mechanics });
     }
 }
