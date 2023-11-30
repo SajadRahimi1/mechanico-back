@@ -16,4 +16,9 @@ public class MechanicRepository : IMechanicRepository
         var mechanics = await appDbContext.Mechanics.Skip((page - 1) * 25).Take(25).ToListAsync();
         return new ResultData(new Data { data = mechanics });
     }
+
+    public Task<ResultData> GetByCity()
+    {
+        throw new NotImplementedException();
+    }
 }
