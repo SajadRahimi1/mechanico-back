@@ -1,0 +1,28 @@
+﻿version: '3.3'
+services:
+  mongo:
+    image: "mongo:focal"
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - mechaniko:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: rayanik
+      MONGO_INITDB_ROOT_PASSWORD: rayanik0011
+
+  mongo-express:
+    image: "mongo-express:latest"
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: rayanik
+      ME_CONFIG_MONGODB_ADMINPASSWORD: rayanik0011
+      ME_CONFIG_BASICAUTH_USERNAME: express
+      ME_CONFIG_BASICAUTH_PASSWORD: express
+      ME_CONFIG_MONGODB_URL: mongodb://rayanik:rayanik0011@mongo:27017/
+      
+
+volumes:
+  mechaniko:

@@ -1,0 +1,6 @@
+@machanico_HostAddress = http://localhost:5285
+
+GET {{machanico_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
