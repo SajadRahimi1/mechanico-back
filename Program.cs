@@ -1,5 +1,6 @@
-using mechanico.Contexts;
-using MongoDB.Driver;
+
+using mechanico.Context;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,8 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var connectionString = builder.Configuration.GetConnectionString("mongo");
-var client = new MongoClient(connectionString);
+var connectionString = builder.Configuration.GetConnectionString("mssqlConnection");
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
