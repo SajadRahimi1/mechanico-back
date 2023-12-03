@@ -26,4 +26,7 @@ public class MechanicController : ControllerBase
     {
         return await mechanicRepository.GetByCity(city);
     }
+
+    [HttpGet]
+    public async Task<ResultData> GetById([FromQuery] Guid id) => await mechanicRepository.GetById(id);
 }

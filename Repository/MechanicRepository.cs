@@ -22,4 +22,10 @@ public class MechanicRepository : IMechanicRepository
         var mechanics = await appDbContext.Mechanics.Where(mechanic => mechanic.Address.City == city).ToListAsync();
         return new ResultData(new Data { data = mechanics });
     }
+
+    public async Task<ResultData> GetById(Guid id)
+    {
+        var mechanic = await appDbContext.Mechanics.SingleOrDefaultAsync(mechanic1 => mechanic1.Id == id);
+        return new ResultData(new Data { data = mechanic });
+    }
 }
