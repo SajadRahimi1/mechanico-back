@@ -16,17 +16,16 @@ public class MechanicController : ControllerBase
     }
 
     [HttpGet, Route("all")]
-    public async Task<ResultData> GetAll([FromQuery] int page = 1)
-    {
-        return await mechanicRepository.GetAll(page);
-    }
+    public async Task<ResultData> GetAll([FromQuery] int page = 1) => await mechanicRepository.GetAll(page);
+
 
     [HttpGet, Route("city")]
-    public async Task<ResultData> GetByCity([FromQuery] string city)
-    {
-        return await mechanicRepository.GetByCity(city);
-    }
+    public async Task<ResultData> GetByCity([FromQuery] string city) => await mechanicRepository.GetByCity(city);
+
 
     [HttpGet]
     public async Task<ResultData> GetById([FromQuery] Guid id) => await mechanicRepository.GetById(id);
+
+    [HttpPost]
+    public async Task<ResultData> SearchMechanic([FromBody] string pattern) => await mechanicRepository.Search(pattern);
 }

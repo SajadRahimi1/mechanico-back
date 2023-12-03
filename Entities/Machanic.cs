@@ -7,4 +7,5 @@ public class Mechanic:BaseEntity
     public string? PlaceName { get; set; }
     public List<string> Images { get; set; } = new List<string>();
     public Address Address { get; set; }
+    public List<Category> Categories { get; set; }
 }
