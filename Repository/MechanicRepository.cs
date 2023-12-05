@@ -1,3 +1,4 @@
+using AutoMapper;
 using GeoCoordinatePortable;
 using mechanico.Context;
 using mechanico.Dtos;
@@ -9,11 +10,13 @@ using Microsoft.EntityFrameworkCore;
 public class MechanicRepository : IMechanicRepository
 {
     private readonly AppDbContext appDbContext;
+    private readonly IMapper mapper;
     
 
-    public MechanicRepository(AppDbContext appDbContext)
+    public MechanicRepository(AppDbContext appDbContext,IMapper mapper)
     {
         this.appDbContext = appDbContext;
+        this.mapper = mapper;
     }
 
     public async Task<ResultData> GetAll(int page = 1)
@@ -30,7 +33,8 @@ public class MechanicRepository : IMechanicRepository
 
     public async Task<ResultData> GetById(Guid id)
     {
-        var mechanic = await appDbContext.Mechanics.SingleOrDefaultAsync(mechanic1 => mechanic1.Id == id);
+        var mechanic = await appDbContext.Mechanics.Include(Mechanic=>Mechanic.Address).SingleOrDefaultAsync(mechanic1 => mechanic1.Id == id);
+        mechanic.Address.Mechanic = null;
         return new ResultData(new Data { data = mechanic });
     }
 
@@ -59,5 +63,31 @@ public class MechanicRepository : IMechanicRepository
         var savedMechanic = await appDbContext.Mechanics.AddAsync(mechanic);
         await appDbContext.SaveChangesAsync();
         return new ResultData(new Data { data = savedMechanic.Entity });
+    }
+
+    public async Task<ResultData> EditMechanicAddress(EditAddressDto addressDto)
+    {
+        var mechanic = await appDbContext.Mechanics.Include(Mechanic =>Mechanic.Address ).SingleOrDefaultAsync(_ => _.Id == addressDto.MechanicId);
+        if (mechanic is null)
+        {
+            return new ResultData(new Data { statusCodes = 404, Message = "مکانیک یافت نشد" });
+        }
+
+        var address = mechanic.Address;
+        if (address is null)
+        {
+            address = mapper.Map<Address>(addressDto);
+            await appDbContext.Addresses.AddAsync(address);
+        }
+        else
+        {
+            address = mapper.Map<Address>(addressDto);
+            appDbContext.Addresses.Update(address);
+        }
+
+        mechanic.Address = address;
+        appDbContext.Mechanics.Update(mechanic);
+        await appDbContext.SaveChangesAsync();
+        return new ResultData(new Data { data = "ادیت شد" });
     }
 }

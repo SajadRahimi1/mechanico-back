@@ -13,7 +13,7 @@ public class AppDbContext:DbContext
         base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Mechanic>().HasKey(mechanic => mechanic.Id);
         modelBuilder.Entity<Address>().HasKey(address => address.Id);
-        modelBuilder.Entity<Address>().HasOne<Mechanic>(address =>address.Mechanic ).WithOne(mechanic => mechanic.Address).HasForeignKey<Address>(address=>address.MechanicId);
+        modelBuilder.Entity<Address>().HasOne<Mechanic>(address =>address.Mechanic).WithOne(mechanic => mechanic.Address).HasForeignKey<Address>(address=>address.MechanicId);
     }
     
     public override int SaveChanges()

@@ -40,4 +40,8 @@ public class MechanicController : ControllerBase
         var mechanic = Mapper.Map<Mechanic>(dto);
         return await mechanicRepository.Signup(mechanic);
     }
+
+    [HttpPut, Route("address")]
+    public async Task<ResultData> EditMechanicAddress([FromBody] EditAddressDto addressDto) =>
+        await mechanicRepository.EditMechanicAddress(addressDto);
 }

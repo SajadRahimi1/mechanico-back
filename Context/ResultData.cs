@@ -26,4 +26,5 @@ public class Data
     public object? data { get; set; }
 
     public string? Token { get; set; }
+    public string? Message { get; set; }
 }

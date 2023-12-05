@@ -9,5 +9,6 @@ public class AutoMapper:Profile
     public AutoMapper()
     {
         CreateMap<CreateMechanicDto, Mechanic>();
+        CreateMap<EditAddressDto, Address>();
     }
 }

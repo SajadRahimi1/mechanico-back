@@ -12,5 +12,6 @@ public interface IMechanicRepository
     public Task<ResultData> GetById(Guid id);
     public Task<ResultData> Search(SearchDto dto);
     public Task<ResultData> Signup(Mechanic mechanic);
+    public Task<ResultData> EditMechanicAddress(EditAddressDto addressDto);
 
 }
