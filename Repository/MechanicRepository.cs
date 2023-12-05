@@ -1,6 +1,7 @@
 using GeoCoordinatePortable;
 using mechanico.Context;
 using mechanico.Dtos;
+using mechanico.Entities;
 using mechanico.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 public class MechanicRepository : IMechanicRepository
 {
     private readonly AppDbContext appDbContext;
+    
 
     public MechanicRepository(AppDbContext appDbContext)
     {
@@ -39,12 +41,23 @@ public class MechanicRepository : IMechanicRepository
         var mechanics = await appDbContext.Mechanics.Include(mechanic => mechanic.Categories)
             .Include(mechanic => mechanic.Address).
             Where(mechanic => mechanic.Categories.Any(category => category.Title.Contains(dto.pattern))).ToListAsync();
-        mechanics.Select(mechanic => data.Append(new SearchReturn
+        foreach (var mechanic in mechanics)
         {
-            Mechanic = mechanic,
-            Distance = coordinate.GetDistanceTo(new GeoCoordinate(mechanic.Address.Latitude,mechanic.Address.Longitude))
-        }));
-        
+            data.Add(new SearchReturn
+            {
+                Mechanic = mechanic,
+                Distance = coordinate.GetDistanceTo(new GeoCoordinate(mechanic.Address.Latitude,
+                    mechanic.Address.Longitude))
+            });
+        }
+
         return new ResultData(new Data { data = data });
+    }
+
+    public async Task<ResultData> Signup(Mechanic mechanic)
+    {
+        var savedMechanic = await appDbContext.Mechanics.AddAsync(mechanic);
+        await appDbContext.SaveChangesAsync();
+        return new ResultData(new Data { data = savedMechanic.Entity });
     }
 }
